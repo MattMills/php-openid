@@ -14,8 +14,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install GMP
       run: sudo apt-get -y install php-gmp
-    - name: Add GMP to php.ini
-      run: echo extension=gmp.so >> /usr/local/etc/php/conf.d/docker-php-ext-sodium.ini
+    - name: Docker PHP ext enable gmp
+      run: docker-php-ext-enable gmp
     - uses: php-actions/composer@v6
     - name: Run Unit Tests
       run: php admin/texttest.php
