@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Tests/TestDriver.php';
-require_once 'PHPUnit/Framework.php';
 require_once 'Console/Getopt.php';
 
 class TextTestResult extends PHPUnit_Framework_TestResult {
