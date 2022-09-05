@@ -18,5 +18,6 @@ jobs:
       with:
         args: --ignore-platform-req=ext-gmp
     - uses: php-actions/phpunit@v3
-    - name: Run Unit Tests
-      run: php admin/texttest.php
+      with:
+        bootstrap: admin/texttest.php
+
