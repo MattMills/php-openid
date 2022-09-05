@@ -13,5 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: php-actions/composer@v6
+    - name: Install GPM
+      run: sudo apt-get -y install php-gpm
     - name: Run Unit Tests
       run: php admin/texttest.php
