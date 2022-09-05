@@ -14,9 +14,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install GMP
       run: sudo apt-get -y install php-gmp
-    - name: dump PHP info
-      run: php -i
-
     - uses: php-actions/composer@v6
+      with:
+        args: --ignore-platform-req=ext-gmp
     - name: Run Unit Tests
       run: php admin/texttest.php
