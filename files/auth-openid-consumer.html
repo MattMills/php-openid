@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+            <title>JanRain OpenID Library</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">JanRain OpenID Library</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
+
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
+
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/OpenID.html" class="">OpenID</a>
+</h4>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -eight phpdocumentor-content">
+                    <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="packages/OpenID.html">OpenID</a></li>
+    </ul>
+
+    <article class="phpdocumentor-element -file">
+        <h2 class="phpdocumentor-content__title">Consumer.php</h2>
+
+            <p class="phpdocumentor-summary">This module documents the main interface with the OpenID consumer
+library.  The only part of the library which has to be used and
+isn&#039;t documented in full here is the store required to create an
+Auth_OpenID_Consumer instance.  More on the abstract store type and
+concrete implementations of it that are provided in the
+documentation for the Auth_OpenID_Consumer constructor.</p>
+
+    <section class="phpdocumentor-description"><p>OVERVIEW</p>
+<p>The OpenID identity verification process most commonly uses the
+following steps, as visible to the user of this library:</p>
+<ol>
+<li>The user enters their OpenID into a field on the consumer's
+site, and hits a login button.</li>
+<li>The consumer site discovers the user's OpenID server using the
+YADIS protocol.</li>
+<li>The consumer site sends the browser a redirect to the identity
+server.  This is the authentication request as described in
+the OpenID specification.</li>
+<li>The identity server's site sends the browser a redirect back
+to the consumer site.  This redirect contains the server's
+response to the authentication request.</li>
+</ol>
+<p>The most important part of the flow to note is the consumer's site
+must handle two separate HTTP requests in order to perform the full
+identity check.</p>
+<p>LIBRARY DESIGN</p>
+<p>This consumer library is designed with that flow in mind.  The goal
+is to make it as easy as possible to perform the above steps
+securely.</p>
+<p>At a high level, there are two important parts in the consumer
+library.  The first important part is this module, which contains
+the interface to actually use this library.  The second is the
+Auth_OpenID_Interface class, which describes the interface to use
+if you need to create a custom method for storing the state this
+library needs to maintain between requests.</p>
+<p>In general, the second part is less important for users of the
+library to know about, as several implementations are provided
+which cover a wide variety of situations in which consumers may use
+the library.</p>
+<p>This module contains a class, Auth_OpenID_Consumer, with methods
+corresponding to the actions necessary in each of steps 2, 3, and 4
+described in the overview.  Use of this library should be as easy
+as creating an Auth_OpenID_Consumer instance and calling the
+methods appropriate for the action the site wants to take.</p>
+<p>STORES AND DUMB MODE</p>
+<p>OpenID is a protocol that works best when the consumer site is able
+to store some state.  This is the normal mode of operation for the
+protocol, and is sometimes referred to as smart mode.  There is
+also a fallback mode, known as dumb mode, which is available when
+the consumer site is not able to store state.  This mode should be
+avoided when possible, as it leaves the implementation more
+vulnerable to replay attacks.</p>
+<p>The mode the library works in for normal operation is determined by
+the store that it is given.  The store is an abstraction that
+handles the data that the consumer needs to manage between http
+requests in order to operate efficiently and securely.</p>
+<p>Several store implementation are provided, and the interface is
+fully documented so that custom stores can be used as well.  See
+the documentation for the Auth_OpenID_Consumer class for more
+information on the interface for stores.  The implementations that
+are provided allow the consumer site to store the necessary data in
+several different ways, including several SQL databases and normal
+files on disk.</p>
+<p>There is an additional concrete store provided that puts the system
+in dumb mode.  This is not recommended, as it removes the library's
+ability to stop replay attacks reliably.  It still uses time-based
+checking to make replay attacks only possible within a small
+window, but they remain possible within that window.  This store
+should only be used if the consumer site has no way to retain data
+between requests at all.</p>
+<p>IMMEDIATE MODE</p>
+<p>In the flow described above, the user may need to confirm to the
+lidentity server that it's ok to authorize his or her identity.
+The server may draw pages asking for information from the user
+before it redirects the browser back to the consumer's site.  This
+is generally transparent to the consumer site, so it is typically
+ignored as an implementation detail.</p>
+<p>There can be times, however, where the consumer site wants to get a
+response immediately.  When this is the case, the consumer can put
+the library in immediate mode.  In immediate mode, there is an
+extra response possible from the server, which is essentially the
+server reporting that it doesn't have enough information to answer
+the question yet.</p>
+<p>USING THIS LIBRARY</p>
+<p>Integrating this library into an application is usually a
+relatively straightforward process.  The process should basically
+follow this plan:</p>
+<p>Add an OpenID login field somewhere on your site.  When an OpenID
+is entered in that field and the form is submitted, it should make
+a request to the your site which includes that OpenID URL.</p>
+<p>First, the application should instantiate the Auth_OpenID_Consumer
+class using the store of choice (Auth_OpenID_FileStore or one of
+the SQL-based stores).  If the application has a custom
+session-management implementation, an object implementing the
+<a href="Auth_Yadis_PHPSession"></a> interface should be passed as the
+second parameter.  Otherwise, the default uses $_SESSION.</p>
+<p>Next, the application should call the Auth_OpenID_Consumer object's
+'begin' method.  This method takes the OpenID URL.  The 'begin'
+method returns an Auth_OpenID_AuthRequest object.</p>
+<p>Next, the application should call the 'redirectURL' method of the
+Auth_OpenID_AuthRequest object.  The 'return_to' URL parameter is
+the URL that the OpenID server will send the user back to after
+attempting to verify his or her identity.  The 'trust_root' is the
+URL (or URL pattern) that identifies your web site to the user when
+he or she is authorizing it.  Send a redirect to the resulting URL
+to the user's browser.</p>
+<p>That's the first half of the authentication process.  The second
+half of the process is done after the user's ID server sends the
+user's browser a redirect back to your site to complete their
+login.</p>
+<p>When that happens, the user will contact your site at the URL given
+as the 'return_to' URL to the Auth_OpenID_AuthRequest::redirectURL
+call made above.  The request will have several query parameters
+added to the URL by the identity server as the information
+necessary to finish the request.</p>
+<p>Lastly, instantiate an Auth_OpenID_Consumer instance as above and
+call its 'complete' method, passing in all the received query
+arguments.</p>
+<p>There are multiple possible return types possible from that
+method. These indicate the whether or not the login was successful,
+and include any additional information appropriate for their type.</p>
+<p>PHP versions 4 and 5</p>
+<p>LICENSE: See the COPYING file included in this distribution.</p>
+</section>
+
+
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">author</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>JanRain, Inc. <a href="mailto:openid@janrain.com">openid@janrain.com</a></p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">copyright</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>2005-2008 Janrain, Inc.</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">license</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>http://www.apache.org/licenses/LICENSE-2.0 Apache</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+
+
+
+<h3 id="interfaces_class_traits">
+    Interfaces, Classes, Traits and Enums
+    <a href="#interfaces_class_traits" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+    
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-Consumer.html"><abbr title="\Auth_OpenID_Consumer">Auth_OpenID_Consumer</abbr></a></dt>
+        <dd>An OpenID consumer implementation that performs discovery and does
+session management.  See the Consumer.php file documentation for
+more information.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-DiffieHellmanSHA1ConsumerSession.html"><abbr title="\Auth_OpenID_DiffieHellmanSHA1ConsumerSession">Auth_OpenID_DiffieHellmanSHA1ConsumerSession</abbr></a></dt>
+        <dd>A class implementing HMAC/DH-SHA1 consumer sessions.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-DiffieHellmanSHA256ConsumerSession.html"><abbr title="\Auth_OpenID_DiffieHellmanSHA256ConsumerSession">Auth_OpenID_DiffieHellmanSHA256ConsumerSession</abbr></a></dt>
+        <dd>A class implementing HMAC/DH-SHA256 consumer sessions.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-PlainTextConsumerSession.html"><abbr title="\Auth_OpenID_PlainTextConsumerSession">Auth_OpenID_PlainTextConsumerSession</abbr></a></dt>
+        <dd>A class implementing plaintext consumer sessions.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-GenericConsumer.html"><abbr title="\Auth_OpenID_GenericConsumer">Auth_OpenID_GenericConsumer</abbr></a></dt>
+        <dd>This class is the interface to the OpenID consumer logic.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-AuthRequest.html"><abbr title="\Auth_OpenID_AuthRequest">Auth_OpenID_AuthRequest</abbr></a></dt>
+        <dd>This class represents an authentication request from a consumer to
+an OpenID server.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-ConsumerResponse.html"><abbr title="\Auth_OpenID_ConsumerResponse">Auth_OpenID_ConsumerResponse</abbr></a></dt>
+        <dd>The base class for responses from the Auth_OpenID_Consumer.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-SuccessResponse.html"><abbr title="\Auth_OpenID_SuccessResponse">Auth_OpenID_SuccessResponse</abbr></a></dt>
+        <dd>A response with a status of Auth_OpenID_SUCCESS. Indicates that
+this request is a successful acknowledgement from the OpenID server
+that the supplied URL is, indeed controlled by the requesting
+agent.  This has three relevant attributes:</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-FailureResponse.html"><abbr title="\Auth_OpenID_FailureResponse">Auth_OpenID_FailureResponse</abbr></a></dt>
+        <dd>A response with a status of Auth_OpenID_FAILURE. Indicates that the
+OpenID protocol has failed. This could be locally or remotely
+triggered.  This has three relevant attributes:</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-TypeURIMismatch.html"><abbr title="\Auth_OpenID_TypeURIMismatch">Auth_OpenID_TypeURIMismatch</abbr></a></dt>
+        <dd>A specific, internal failure used to detect type URI mismatch.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-ServerErrorContainer.html"><abbr title="\Auth_OpenID_ServerErrorContainer">Auth_OpenID_ServerErrorContainer</abbr></a></dt>
+        <dd>Exception that is raised when the server returns a 400 response
+code to a direct request.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-CancelResponse.html"><abbr title="\Auth_OpenID_CancelResponse">Auth_OpenID_CancelResponse</abbr></a></dt>
+        <dd>A response with a status of Auth_OpenID_CANCEL. Indicates that the
+user cancelled the OpenID authentication request.  This has two
+relevant attributes:</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Auth-OpenID-SetupNeededResponse.html"><abbr title="\Auth_OpenID_SetupNeededResponse">Auth_OpenID_SetupNeededResponse</abbr></a></dt>
+        <dd>A response with a status of Auth_OpenID_SETUP_NEEDED. Indicates
+that the request was in immediate mode, and the server is unable to
+authenticate the user without further interaction.</dd>
+    
+    
+    </dl>
+
+
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="namespaces/default.html#constant_Auth_OpenID_CANCEL">Auth_OpenID_CANCEL</a>
+    <span>
+        &nbsp;= &#039;cancel&#039;                            </span>
+</dt>
+<dd>Status to indicate cancellation of OpenID authentication.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="namespaces/default.html#constant_Auth_OpenID_FAILURE">Auth_OpenID_FAILURE</a>
+    <span>
+        &nbsp;= &#039;failure&#039;                            </span>
+</dt>
+<dd>This is the status code completeAuth returns when the value it
+received indicated an invalid login.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="namespaces/default.html#constant_Auth_OpenID_PARSE_ERROR">Auth_OpenID_PARSE_ERROR</a>
+    <span>
+        &nbsp;= &#039;parse error&#039;                            </span>
+</dt>
+<dd>This is the status code beginAuth returns when the page fetched
+from the entered OpenID URL doesn&#039;t contain the necessary link tags
+to function as an identity page.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="namespaces/default.html#constant_Auth_OpenID_SETUP_NEEDED">Auth_OpenID_SETUP_NEEDED</a>
+    <span>
+        &nbsp;= &#039;setup needed&#039;                            </span>
+</dt>
+<dd>This is the status code completeAuth returns when the
+{@link Auth_OpenID_Consumer} instance is in immediate mode, and the
+identity server sends back a URL to send the user to to complete his
+or her login.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="namespaces/default.html#constant_Auth_OpenID_SUCCESS">Auth_OpenID_SUCCESS</a>
+    <span>
+        &nbsp;= &#039;success&#039;                            </span>
+</dt>
+<dd>This is the status code returned when the complete method returns
+successfully.</dd>
+
+                            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_Auth_OpenID_getAvailableSessionTypes">Auth_OpenID_getAvailableSessionTypes()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Returns available session types.</dd>
+
+    </dl>
+
+
+
+        
+    <section class="phpdocumentor-constants">
+        <h3 class="phpdocumentor-elements__header" id="constants">
+            Constants
+            <a href="files/auth-openid-consumer.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_Auth_OpenID_CANCEL">
+        Auth_OpenID_CANCEL
+        <a href="namespaces/default.html#constant_Auth_OpenID_CANCEL" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Auth/OpenID/Consumer.php"><a href="files/auth-openid-consumer.html"><abbr title="Auth/OpenID/Consumer.php">Consumer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">185</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Status to indicate cancellation of OpenID authentication.</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">Auth_OpenID_CANCEL</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;cancel&#039;</span>
+</code>
+
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_Auth_OpenID_FAILURE">
+        Auth_OpenID_FAILURE
+        <a href="namespaces/default.html#constant_Auth_OpenID_FAILURE" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Auth/OpenID/Consumer.php"><a href="files/auth-openid-consumer.html"><abbr title="Auth/OpenID/Consumer.php">Consumer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">191</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This is the status code completeAuth returns when the value it
+received indicated an invalid login.</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">Auth_OpenID_FAILURE</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;failure&#039;</span>
+</code>
+
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_Auth_OpenID_PARSE_ERROR">
+        Auth_OpenID_PARSE_ERROR
+        <a href="namespaces/default.html#constant_Auth_OpenID_PARSE_ERROR" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Auth/OpenID/Consumer.php"><a href="files/auth-openid-consumer.html"><abbr title="Auth/OpenID/Consumer.php">Consumer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">206</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This is the status code beginAuth returns when the page fetched
+from the entered OpenID URL doesn&#039;t contain the necessary link tags
+to function as an identity page.</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">Auth_OpenID_PARSE_ERROR</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;parse error&#039;</span>
+</code>
+
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_Auth_OpenID_SETUP_NEEDED">
+        Auth_OpenID_SETUP_NEEDED
+        <a href="namespaces/default.html#constant_Auth_OpenID_SETUP_NEEDED" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Auth/OpenID/Consumer.php"><a href="files/auth-openid-consumer.html"><abbr title="Auth/OpenID/Consumer.php">Consumer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">199</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This is the status code completeAuth returns when the
+{@link Auth_OpenID_Consumer} instance is in immediate mode, and the
+identity server sends back a URL to send the user to to complete his
+or her login.</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">Auth_OpenID_SETUP_NEEDED</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;setup needed&#039;</span>
+</code>
+
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_Auth_OpenID_SUCCESS">
+        Auth_OpenID_SUCCESS
+        <a href="namespaces/default.html#constant_Auth_OpenID_SUCCESS" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Auth/OpenID/Consumer.php"><a href="files/auth-openid-consumer.html"><abbr title="Auth/OpenID/Consumer.php">Consumer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">180</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This is the status code returned when the complete method returns
+successfully.</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">Auth_OpenID_SUCCESS</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;success&#039;</span>
+</code>
+
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-functions">
+        <h3 class="phpdocumentor-elements__header" id="functions">
+            Functions
+            <a href="files/auth-openid-consumer.html#functions" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_Auth_OpenID_getAvailableSessionTypes">
+        Auth_OpenID_getAvailableSessionTypes()
+        <a href="namespaces/default.html#function_Auth_OpenID_getAvailableSessionTypes" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Auth/OpenID/Consumer.php"><a href="files/auth-openid-consumer.html"><abbr title="Auth/OpenID/Consumer.php">Consumer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">563</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns available session types.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">Auth_OpenID_getAvailableSessionTypes</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+            </section>
+
+    </article>
+                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
+            </div>
+        </div>
+        <a href="files/auth-openid-consumer.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+</body>
+</html>
